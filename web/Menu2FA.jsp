@@ -3,28 +3,22 @@
     Created on : 15/11/2020, 07:53:00 PM
     Author     : USUARIO HP
 --%>
+<%@page import="APIResponse.EAFAccount"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Iterator"%>
 <%@page import="APIResponse.LoginResponse2FA"%>
 <%@page import="APIResponse.LoginResponse"%>
-<% LoginResponse2FA status = (LoginResponse2FA)request.getAttribute("loginresponse2fa");%>
-<% LoginResponse2FA user_id = (LoginResponse2FA)request.getAttribute("loginresponse2fa");%>
+<%@page import="APIResponse.EnterpriseAccountFinderResponse"%>
+
+<% EnterpriseAccountFinderResponse afr = (EnterpriseAccountFinderResponse)request.getAttribute("eafresponse");%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/owl.transitions.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/font-awesome.min.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/simple-line-icons.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/animate.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/style.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/owl.carousel.css"/>
-        <link rel="stylesheet" type="text/css" href="Ethereal/css/owl.theme.css"/>
-
-                <style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
 body {
     
     <%
@@ -141,26 +135,60 @@ h1 {
 </style><title>Inicio</title>
     </head>
     <body>
-        <div class="main-header" id="main-header">
-  <nav class="navbar mynav navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <a class="navbar-brand" href="#">Menu Admin</a> </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
-          
-                
-          <li><a href="LogoutServlet.java">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+        <div class="topnav " id="header">
+        <nav class ="navbar navbar-dark bg-dark">
+            <a class="navbar-toggler"><span class="navbar-toggler-icon"></span>
+  <a href="#home" class="active">Webmaster</a>
+  
+  <div class="dropdown" align="right">
+      <form action="LogoutServlet" id="form1" method="POST">
+  <!-- <a href="" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cerrar sesion</a>-->
+    <input type="submit" value="Cerrar Sesión"/>
+      </form>
+  </div>
+  
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
 </div>
-        
-  
-  
 
+<div style="padding-left:16px" >
+    <br><br><h1 style="color:white;" align="center">Cuentas Empresariales:
+    <br><br><strong>${nom}</strong></h1>
+</div>
+
+<table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Email</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+    </tr>
+  </thead>
+  <%
+      System.out.println(afr);
+      
+      Iterator it = afr.success.accounts.iterator();
+      
+            while(it.hasNext()){
+                EAFAccount cuenta = (EAFAccount)it.next();
+        %>
+  <tbody>
+    <tr>
+      <td><%=cuenta.account_id%></td>
+      <td><%=cuenta.email%></td>
+      <td><%=cuenta.firstName%></td>
+      <td><%=cuenta.lastName%></td>
+      
+      <td><button type="button" class="btn btn-primary">Aceptar</button></td>
+      <td><button type="button" class="btn btn-danger">Rechazar</button></td>
+    </tr>
+    <%
+            }
+        %>
+  </tbody>
+</table>
 
 <script>
 function myFunction() {
@@ -172,10 +200,10 @@ function myFunction() {
   }
 }
 </script>
-<script src="Ethereal/js/jquery.min.js"></script> 
-<script src="Ethereal/js/bootstrap.min.js"></script> 
-<script type="Ethereal/text/javascript" src="Ethereal/js/owl.carousel.min.js"></script> 
-<script type="Ethereal/text/javascript" src="Ethereal/js/jquery.countTo.js"></script> 
-<script type="Ethereal/text/javascript" src="Ethereal/js/jquery.waypoints.min.js"></script> 
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     </body>
 </html>
