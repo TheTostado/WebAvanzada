@@ -7,6 +7,7 @@ package servlets;
 
 import APIRequest.LoginRequest;
 import APIRequest.LoginRequest2FA;
+import APIResponse.EnterpriseAccountFinderResponse;
 import APIResponse.LoginResponse;
 import APIResponse.LoginResponse2FA;
 import java.io.IOException;
@@ -100,6 +101,10 @@ public class LoginServlet2FA extends HttpServlet {
 
             if (loginresponse2fa != null) {
                 if (loginresponse2fa.success.status.equals("OK")) {
+                    httpAPIRequest<EnterpriseAccountFinderResponse> eaf = new httpAPIRequest<>();
+                    EnterpriseAccountFinderResponse eafresponse = eaf.GET("/account/find/pending-review", false, EnterpriseAccountFinderResponse.class);
+                    
+                    request.setAttribute("eafresponse", eafresponse);
                     request.setAttribute("loginresponse2fa", loginresponse2fa);
                     request.getRequestDispatcher("Menu2FA.jsp").forward(request, response);
                 }
